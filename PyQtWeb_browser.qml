@@ -93,20 +93,53 @@ ApplicationWindow {
                     root.showMaximized()
                 request.accept()
             }
+            onLoadingChanged: {
+                if (loadRequest.status === WebEngineView.LoadFailedStatus ||loadRequest.status === WebEngineView.LoadStoppedStatus){
+                    webView.visible = false
+                    errorMessage.visible = true
+                }
+            }
+            url: "http://localhost:8085/error.html"
+        }
 
-            onNewViewRequested: function(request) {
-                        // Handle the new view request
-                        if (request.userInitiated) {
-                            // For tabs (same window)
-                            var newTab = tabView.createNewTab(request.requestedUrl)
-                            request.openIn(newTab.webView)
-                        } else {
-                            // For popups (new window)
-                            var newWindow = createPopupWindow(request.requestedUrl)
-                            request.openIn(newWindow.webView)
+        Rectangle{
+            id: errorMessage
+            width: 200
+            height: width
+            anchors.centerIn: parent
+            visible: false
+
+            Column{
+                spacing: 10
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Text {
+                    text: qsTr("Web page not found !! .Click the button below")
+                    font.pointSize: 10
+                }
+
+                Rectangle{
+                    width: 200
+                    height: 50
+                    Button{
+                        text: "Search on Google"
+                        anchors.fill: parent
+                        font.pointSize: 10
+                        background: Rectangle{
+                            width: 200
+                            height: 50
+                            color: "skyblue"
+                        }
+                        onClicked: {
+                            webView.url = "https://www.google.com"
+                            webView.visible = true
+                            errorMessage.visible = false
                         }
                     }
-            url: "http://www.google.com"
+                }
+
+            }
+
         }
     }
 
