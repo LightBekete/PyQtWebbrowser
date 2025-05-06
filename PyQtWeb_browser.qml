@@ -16,7 +16,7 @@ ApplicationWindow {
         id: searchBar
         width: parent.width
         height: 50
-        //color: "red"
+        radius: 20
 
         Row{
             spacing: 15
@@ -35,7 +35,7 @@ ApplicationWindow {
             Rectangle{
                 width: 1000
                 height: 50
-                radius: 10
+                radius: 20
 
                 TextField{
                     id: urlPath
