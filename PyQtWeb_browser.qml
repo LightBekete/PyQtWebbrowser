@@ -48,7 +48,16 @@ ApplicationWindow {
             Button{
                 text: "search"
                 onClicked: {
-                    webView.url = urlPath.text
+
+                    if(webView.visible === false){
+                        webView.url = urlPath.text
+                        errorMessage.visible = false
+                        webView.visible = true
+                    }
+                    else{
+                        webView.url = urlPath.text
+                        errorMessage.visible = false
+                    }
                 }
             }
 
