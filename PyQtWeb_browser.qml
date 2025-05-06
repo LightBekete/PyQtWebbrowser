@@ -121,6 +121,7 @@ ApplicationWindow {
                 Rectangle{
                     width: 200
                     height: 50
+                    radius: 10
                     Button{
                         text: "Search on Google"
                         anchors.fill: parent
@@ -128,6 +129,7 @@ ApplicationWindow {
                         background: Rectangle{
                             width: 200
                             height: 50
+                            radius: 10
                             color: "skyblue"
                         }
                         onClicked: {
