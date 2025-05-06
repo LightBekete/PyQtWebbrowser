@@ -6,6 +6,7 @@ import QtQuick.Controls 2.15
 import QtWebEngine 1.10
 
 ApplicationWindow {
+    id: root
     width: screen.width
     height: screen.height
     visible: true
@@ -18,8 +19,19 @@ ApplicationWindow {
         //color: "red"
 
         Row{
-            spacing: 10
-            anchors.fill: parent
+            spacing: 15
+            anchors.horizontalCenter: parent.horizontalCenter
+            Image {
+                id: back
+                height: 32
+                width: height
+                source: "broswer_assets/back.png"
+                MouseArea{
+                    id:backMouseArea
+                    anchors.fill: parent
+                    onClicked: webView.goBack()
+                }
+            }
             Rectangle{
                 width: 1000
                 height: 50
@@ -39,6 +51,22 @@ ApplicationWindow {
                     webView.url = urlPath.text
                 }
             }
+
+
+            Image {
+                id: forward
+                height: 32
+                width: height
+                //fillMode: Image.PreserveAspectFit
+                source: "broswer_assets/forward.png"
+                MouseArea{
+                    id:forwardMouseArea
+                    anchors.fill: parent
+                    onClicked: webView.goForward()
+                }
+            }
+
+
         }
     }
 
@@ -50,13 +78,36 @@ ApplicationWindow {
             left: parent.left
             bottom: parent.bottom
         }
-       // color: "green"
+        // color: "green"
 
         WebEngineView {
-                id: webView
-                anchors.fill: parent
-                url: "http://www.google.com"
+            id: webView
+            anchors.fill: parent
+
+            //this to enabling toggle between full screen and normal or maximised view.
+            // e.g fullscreen on youtube and back to initial state
+            onFullScreenRequested: function(request) {
+                if (request.toggleOn)
+                    root.showFullScreen()
+                else
+                    root.showMaximized()
+                request.accept()
             }
+
+            onNewViewRequested: function(request) {
+                        // Handle the new view request
+                        if (request.userInitiated) {
+                            // For tabs (same window)
+                            var newTab = tabView.createNewTab(request.requestedUrl)
+                            request.openIn(newTab.webView)
+                        } else {
+                            // For popups (new window)
+                            var newWindow = createPopupWindow(request.requestedUrl)
+                            request.openIn(newWindow.webView)
+                        }
+                    }
+            url: "http://www.google.com"
+        }
     }
 
 
